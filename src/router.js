@@ -6,13 +6,20 @@ Vue.use(Router);
 const routes = [
   {
     path: '*',
-    redirect: '/goods'
+    redirect: '/login'
   },
   {
     name: 'user',
     component: () => import('./view/user'),
     meta: {
       title: '会员中心'
+    }
+  },
+  {
+    name: 'login',
+    component: () => import('./view/login/login'),
+    meta: {
+      title: '登录'
     }
   },
   {
