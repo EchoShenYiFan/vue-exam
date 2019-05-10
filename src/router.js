@@ -6,7 +6,7 @@ Vue.use(Router);
 const routes = [
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     name: 'user',
@@ -16,10 +16,67 @@ const routes = [
     }
   },
   {
+  	path: '/home',  	
+    name: 'home',
+    component: (resolve) => require(['@/view/index/index.vue'], resolve),
+    meta: {
+      title: '首页'
+    }
+  },
+  {
+  	path: '/goodClass',  	
+    name: 'goodClass',
+    component: (resolve) => require(['@/view/index/good-classes.vue'], resolve),
+    meta: {
+      title: '分类'
+    }
+  },
+  {
+  	path: '/car',  	
+    name: 'car',
+    component: (resolve) => require(['@/view/index/car.vue'], resolve),
+    meta: {
+      title: '购物车'
+    }
+  },
+  {
+  	path: '/mine',  	
+    name: 'mine',
+    component: (resolve) => require(['@/view/index/mine.vue'], resolve),
+    meta: {
+      title: '我的'
+    }
+  },
+  {
+  	path: '/login',  	
     name: 'login',
-    component: () => import('./view/login/login'),
+    component: (resolve) => require(['@/view/login/login.vue'], resolve),
     meta: {
       title: '登录'
+    }
+  },
+  {
+  	path: '/register',  	
+    name: 'register',
+    component: (resolve) => require(['@/view/login/register.vue'], resolve),
+    meta: {
+      title: '注册'
+    }
+  },
+  {
+  	path: '/password',  	
+    name: 'password',
+    component: (resolve) => require(['@/view/login/password.vue'], resolve),
+    meta: {
+      title: '忘记密码'
+    }
+  },
+  {
+  	path: '/editPassword',  	
+    name: 'editPassword',
+    component: (resolve) => require(['@/view/login/editPassword.vue'], resolve),
+    meta: {
+      title: '修改登录密码'
     }
   },
   {

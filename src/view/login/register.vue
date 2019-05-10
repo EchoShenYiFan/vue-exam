@@ -1,24 +1,36 @@
 <template>
   <div class="container">
     <van-nav-bar
-		  title="登录"
-		  right-text="立即注册"
+		  title=""
+		  right-text="已有账号去登录"
 		  left-arrow
 		  @click-left="onClickLeft"
 		  @click-right="onClickRight"
 		></van-nav-bar>
 		<img :src="goods.thumb" class="avatar"/>
-		<div class="login-box">
+		<div class="register-box">
 			<div class="cell">
 				<span>账号</span>
 				<input type="number" placeholder="请输入您注册的手机号"/>
 			</div>
 			<div class="cell">
-				<span>密码</span>
-				<input type="password" placeholder="请输入您的登录密码6-12位"/>
+				<input type="number" placeholder="请输入您的验证码"/>
+				<span class="code">发送验证码</span>
 			</div>
-			<van-button round type="primary" class="submit">登录</van-button>
-			<p @click="goTo">忘记密码?</p>
+			<div class="cell">
+				<span>密码</span>
+				<input type="password" placeholder="请输入您的密码6-12位"/>
+			</div>
+			<div class="cell">
+				<span>密码</span>
+				<input type="password" placeholder="请再次输入您的密码6-12位"/>
+			</div>
+			<div class="cell">
+				<span>邀请码</span>
+				<input type="password" placeholder="请输入您的邀请码"/>
+			</div>
+			<van-button round type="primary" class="submit">注册</van-button>
+			<p>点击注册表示已阅读并同意<font>《用户协议》</font></p>
 		</div>
   </div>
 </template>
@@ -45,13 +57,10 @@ export default {
 
   methods: {
     onClickLeft() {
-//    Toast('返回');
+			
     },
     onClickRight() {
-			this.$router.push({path:"/register"})
-    },
-    goTo(){
-    	this.$router.push({path:"/password"})
+			this.$router.push({path:"/login"})
     }
   },
   created(){
@@ -76,10 +85,10 @@ export default {
 		height: 80px;
 		margin: auto;
 		border-radius: 80px;
-		margin-top: 100px;
+		margin-top: 40px;
 		margin-bottom: 20px;
 	}
-	.login-box{
+	.register-box{
 		width: 90%;
 		height: auto;
 		margin: 0 auto;
@@ -98,7 +107,7 @@ export default {
 		color: #333333;
 	}
 	.cell input{
-		width: 85%;
+		width: 80%;
 		border: 0;
 	}
 	.submit{
@@ -109,10 +118,21 @@ export default {
 	.van-nav-bar__text{
 		color: #333;
 	}
-	.login-box p{
-		color: #999999;
-		font-size: 14px;
+	.code{
+		width: 140px !important;
+		height: 15px;
+		background-color: #07c160;
+		color: #FFFFFF !important;
+		padding: 10px 0;
 		text-align: center;
-		margin-top: 200px;
+		border-radius: 5px;
+	}
+	.register-box p{
+		color: #999;
+		font-size: 14px;
+	}
+	.register-box p>font{
+		color: #07c160;
+		cursor: pointer;
 	}
 </style>
