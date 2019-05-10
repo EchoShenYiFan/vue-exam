@@ -9,13 +9,6 @@ const routes = [
     redirect: '/home'
   },
   {
-    name: 'user',
-    component: () => import('./view/user'),
-    meta: {
-      title: '会员中心'
-    }
-  },
-  {
   	path: '/home',  	
     name: 'home',
     component: (resolve) => require(['@/view/index/index.vue'], resolve),
@@ -77,20 +70,6 @@ const routes = [
     component: (resolve) => require(['@/view/login/editPassword.vue'], resolve),
     meta: {
       title: '修改登录密码'
-    }
-  },
-  {
-    name: 'cart',
-    component: () => import('./view/cart'),
-    meta: {
-      title: '购物车'
-    }
-  },
-  {
-    name: 'goods',
-    component: () => import('./view/goods'),
-    meta: {
-      title: '商品详情'
     }
   }
 ];
