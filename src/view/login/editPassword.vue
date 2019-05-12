@@ -8,36 +8,41 @@
 		<div class="register-box">
 			<div class="cell">
 				<span>+86</span>
-				<input type="number" placeholder="请输入您的手机号"/>
+				<input type="number" v-model="phone" disabled/>
 			</div>
 			<div class="cell">
 				<span>密码</span>
-				<input type="password" placeholder="请输入您的登录密码6-12位"/>
+				<input type="password" placeholder="请输入您的原密码" v-model="pwd"/>
 			</div>
 			<div class="cell">
 				<span>密码</span>
-				<input type="password" placeholder="请在此输入您的登录密码6-12位"/>
+				<input type="password" placeholder="请在此输入您的新密码" v-model="newpwd"/>
 			</div>
 			<div class="cell">
-				<input type="number" placeholder="请输入您的验证码"/>
-				<span class="code">发送验证码</span>
+				<input type="number" placeholder="请输入您的验证码" v-model="yzm"/>
+				<span class="code" @click="yzmClick">发送验证码</span>
 			</div>
-			
+
 			<van-button round type="primary" class="submit">确认提交</van-button>
 		</div>
   </div>
 </template>
 
 <script>
-import {NavBar,Button} from 'vant';
+import {NavBar,Button,Toast} from 'vant';
 export default {
   components: {
     [NavBar.name]: NavBar,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]:Toast
   },
 
   data() {
     return {
+      phone:"",
+      pwd:"",
+      yzm:"",
+      newpwd:"",
       goods: {
         title: '美国伽力果（约680g/3个）',
         price: 2680,
@@ -50,13 +55,38 @@ export default {
 
   methods: {
     onClickLeft() {
-			
+
     },
     onClickRight() {
 			this.$router.push({path:"/login"})
+    },
+    yzmClick(){
+      let _this = this;
+      if(_this.phone==""){
+        Toast('请输入手机号');
+        return;
+      }
+      let params = {};
+      params.phone = _this.phone;
+      _this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=zcyanzhengma',params).then((res) => {
+        console.log(res)
+      })
+    },
+    submit(){
+      //get请求
+      let _this = this;
+      let params = {};
+      params.user_id = window.localstroge.getItem("user_id");
+      params.user_name = window.localstroge.getItem("user_name");
+      params.password = _this.newpwd;
+      params.outpassword = _this.pwd;
+    	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=updatepwd',{phone:_this.phone,pwd:_this.pwd}).then((res) => {
+    	    console.log(res)
+      })
     }
   },
   created(){
+
   	//get请求
 //	this.$fetch('/api/v2/movie/top250',{'aaa':'aaa'}).then((response) => {
 //	    console.log(response)

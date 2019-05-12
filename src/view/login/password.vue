@@ -8,51 +8,82 @@
 		<div class="register-box">
 			<div class="cell">
 				<span>+86</span>
-				<input type="number" placeholder="请输入您的手机号"/>
+				<input type="number" placeholder="请输入您的手机号" v-model="phone"/>
 			</div>
-			<div class="cell">
-				<input type="password" placeholder="请输入您的验证码"/>
-				<span class="code">发送验证码</span>
+      <div class="cell">
+        <input type="password" placeholder="请输入您的验证码" v-model="yzm"/>
+        <span class="code" @click="yzmClick">发送验证码</span>
+      </div>
+      <div class="cell">
+				<span>原密码</span>
+				<input type="number" placeholder="请输入您的密码" v-model="pwd"/>
 			</div>
-			
-			<van-button round type="primary" class="submit">确认提交</van-button>
+      <div class="cell">
+				<span>新密码</span>
+				<input type="number" placeholder="请确认您的新密码" v-model="newpwd"/>
+			</div>
+
+			<van-button round type="primary" class="submit" @click="submit">确认提交</van-button>
 		</div>
   </div>
 </template>
 
 <script>
-import {NavBar,Button} from 'vant';
+import {NavBar,Button,Toast} from 'vant';
 export default {
   components: {
     [NavBar.name]: NavBar,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]:Toast
   },
 
   data() {
     return {
-      goods: {
-        title: '美国伽力果（约680g/3个）',
-        price: 2680,
-        express: '免运费',
-        remain: 19,
-        thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg'
-      }
+      phone:"",
+      yzm:"",
+      pwd:"",
+      newpwd:""
     };
   },
 
   methods: {
     onClickLeft() {
-			
+
     },
     onClickRight() {
 			this.$router.push({path:"/login"})
+    },
+    yzmClick(){
+      let _this = this;
+      if(_this.phone==""){
+        Toast('请输入手机号');
+        return;
+      }
+      let params = {};
+      params.phone = _this.phone;
+      _this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=zcyanzhengma',params).then((res) => {
+        console.log(res)
+      })
+    },
+    submit(){
+      //get请求
+      let _this = this;
+      let params = {};
+      params.phone = _this.phone;
+      params.passwords = _this.pwd;
+      params.oncePwd = _this.newpwd;
+    	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=ForgetPassword',params).then((res) => {
+    	    if(res.code==0){
+            Toast("修改成功");
+            this.$router.push({path:"/login"});
+          }else{
+            Toast("修改失败，请稍后重试")
+          }
+      })
     }
   },
   created(){
   	//get请求
-//	this.$fetch('/api/v2/movie/top250',{'aaa':'aaa'}).then((response) => {
-//	    console.log(response)
-//	  })
   }
 };
 </script>

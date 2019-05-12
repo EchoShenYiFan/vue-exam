@@ -9,7 +9,7 @@
 import Footers from '@/component/footer'
 
 export default {
-  
+
 
   data() {
     return {
@@ -22,7 +22,7 @@ export default {
   },
 
   methods: {
-    
+
   }
 };
 </script>

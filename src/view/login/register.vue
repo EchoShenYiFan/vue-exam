@@ -11,40 +11,46 @@
 		<div class="register-box">
 			<div class="cell">
 				<span>账号</span>
-				<input type="number" placeholder="请输入您注册的手机号"/>
+				<input type="number" placeholder="请输入您注册的手机号" v-model="phone"/>
 			</div>
 			<div class="cell">
-				<input type="number" placeholder="请输入您的验证码"/>
-				<span class="code">发送验证码</span>
-			</div>
-			<div class="cell">
-				<span>密码</span>
-				<input type="password" placeholder="请输入您的密码6-12位"/>
+				<input type="number" placeholder="请输入您的验证码" v-model="yzm"/>
+				<span class="code" @click="yzmClick">发送验证码</span>
 			</div>
 			<div class="cell">
 				<span>密码</span>
-				<input type="password" placeholder="请再次输入您的密码6-12位"/>
+				<input type="password" placeholder="请输入您的密码6-12位" v-model="pwd"/>
+			</div>
+			<div class="cell">
+				<span>密码</span>
+				<input type="password" placeholder="请再次输入您的密码6-12位" v-model="qrpwd"/>
 			</div>
 			<div class="cell">
 				<span>邀请码</span>
-				<input type="password" placeholder="请输入您的邀请码"/>
+				<input type="number" placeholder="请输入您的邀请码" v-model="yqm"/>
 			</div>
-			<van-button round type="primary" class="submit">注册</van-button>
+			<van-button round type="primary" class="submit" @click="submit">注册</van-button>
 			<p>点击注册表示已阅读并同意<font>《用户协议》</font></p>
 		</div>
   </div>
 </template>
 
 <script>
-import {NavBar,Button} from 'vant';
+import {NavBar,Button,Toast } from 'vant';
 export default {
   components: {
     [NavBar.name]: NavBar,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]:Toast
   },
 
   data() {
     return {
+      phone:"",
+      yzm:"",
+      pwd:"",
+      qrpwd:"",
+      yqm:"",
       goods: {
         title: '美国伽力果（约680g/3个）',
         price: 2680,
@@ -57,17 +63,71 @@ export default {
 
   methods: {
     onClickLeft() {
-			
+
     },
     onClickRight() {
 			this.$router.push({path:"/login"})
+    },
+    yzmClick(){
+      let _this = this;
+      if(_this.phone==""){
+        Toast('请输入手机号');
+        return;
+      }
+      let params = {};
+      params.phone = _this.phone;
+      _this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=zcyanzhengma',params).then((res) => {
+        if(res.code == 0){
+          Toast('发送成功');
+        }else{
+          Toast('发送失败，请稍后重试');
+        }
+      })
+    },
+    submit(){
+      let _this = this;
+      if(_this.phone==""){
+        Toast('请输入手机号');
+        return;
+      }
+      if(_this.yzm==""){
+        Toast('请输入验证码');
+        return;
+      }
+      if(_this.pwd==""){
+        Toast('请输入密码');
+        return;
+      }
+      if(_this.qrpwd==""){
+        Toast('请输入确认密码');
+        return;
+      }
+      if(_this.pwd != _this.qrpwd){
+        Toast('两次密码不一致');
+        return;
+      }
+      // if(_this.yqm != _this.yqm){
+      //   Toast('请输入邀请码');
+      //   return;
+      // }
+      let params = {};
+      params.phone = _this.phone;
+      params.password = _this.pwd;
+      params.tjm = _this.yqm;
+      params.true_pwd = _this.qrpwd;
+      this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=Register',params).then((res) => {
+        console.log(res)
+        if(res.code==0){
+          Toast('注册成功');
+          this.$router.push({path:"/login"})
+        }else{
+          Toast('注册失败，请稍后重试');
+        }
+      })
     }
   },
   created(){
-  	//get请求
-//	this.$fetch('/api/v2/movie/top250',{'aaa':'aaa'}).then((response) => {
-//	    console.log(response)
-//	  })
+
   }
 };
 </script>

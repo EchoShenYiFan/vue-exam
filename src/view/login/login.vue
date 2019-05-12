@@ -11,24 +11,25 @@
 		<div class="login-box">
 			<div class="cell">
 				<span>账号</span>
-				<input type="number" placeholder="请输入您注册的手机号"/>
+				<input type="number" placeholder="请输入您注册的手机号" v-model="phone"/>
 			</div>
 			<div class="cell">
 				<span>密码</span>
-				<input type="password" placeholder="请输入您的登录密码6-12位"/>
+				<input type="password" placeholder="请输入您的登录密码6-12位" v-model="pwd"/>
 			</div>
-			<van-button round type="primary" class="submit">登录</van-button>
+			<van-button round type="primary" class="submit" @click="submit">登录</van-button>
 			<p @click="goTo">忘记密码?</p>
 		</div>
   </div>
 </template>
 
 <script>
-import {NavBar,Button} from 'vant';
+import {NavBar,Button,Toast} from 'vant';
 export default {
   components: {
     [NavBar.name]: NavBar,
-    [Button.name]: Button
+    [Button.name]: Button,
+    [Toast.name]:Toast
   },
 
   data() {
@@ -39,7 +40,9 @@ export default {
         express: '免运费',
         remain: 19,
         thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/1791ba14088f9c2be8c610d0a6cc0f93.jpeg'
-      }
+      },
+      phone:"",
+      pwd:""
     };
   },
 
@@ -52,13 +55,26 @@ export default {
     },
     goTo(){
     	this.$router.push({path:"/password"})
+    },
+    submit(){
+      //get请求
+      let _this = this;
+    	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=login',{phone:_this.phone,Pwd:_this.pwd}).then((res) => {
+    	    console.log(res)
+          if(res.code==0){
+            localStorage.setItem("admin_id",res.admin_id);
+            localStorage.setItem("is_vip",res.is_vip);
+            localStorage.setItem("rank",res.rank);
+            localStorage.setItem("user_id",res.user_id);
+            Toast('登陆成功');
+            this.$router.push({path:"/index"});
+          }else{
+            Toast('登录失败，请稍后重试');
+          }
+      })
     }
   },
   created(){
-  	//get请求
-//	this.$fetch('/api/v2/movie/top250',{'aaa':'aaa'}).then((response) => {
-//	    console.log(response)
-//	  })
   }
 };
 </script>
