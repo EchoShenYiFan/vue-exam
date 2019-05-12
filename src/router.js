@@ -71,6 +71,30 @@ const routes = [
     meta: {
       title: '修改登录密码'
     }
+  },
+  {
+  	path: '/goodList',  	 
+    name: 'goodList',
+    component: (resolve) => require(['@/view/index/good-list.vue'], resolve),
+    meta: {
+      title: '商品列表'
+    }
+  },
+  {
+  	path: '/myAddress',  	 
+    name: 'myAddress',
+    component: (resolve) => require(['@/view/user/my_address.vue'], resolve),
+    meta: {
+      title: '地址管理'
+    }
+  },
+  {
+  	path: '/editAddress',  	 
+    name: 'editAddress',
+    component: (resolve) => require(['@/view/user/edit_address.vue'], resolve),
+    meta: {
+      title: '地址管理'
+    }
   }
 ];
 
