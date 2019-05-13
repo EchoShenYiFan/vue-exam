@@ -220,7 +220,7 @@ export default {
 
 
 
-        
+      console.log('jhsdfjsjgiks');
         
         let user_id = localStorage.getItem("user_id");
            axios.get('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php', {
