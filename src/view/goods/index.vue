@@ -213,8 +213,8 @@ export default {
         }
     },
     mounted(){
-        var name = this.$route.query.name;
-        console.log(name);
+        var name = this.$route.query.name;console.log(name);
+        
         let user_id = localStorage.getItem("user_id");
            axios.get('http://www.nongzi.com/mobile/jiekou.php?act=goods_details', {
                 params: {
