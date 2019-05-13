@@ -95,7 +95,31 @@ const routes = [
     meta: {
       title: '地址管理'
     }
-  }
+  },
+  {
+    path: '/person',    
+    name: 'person',
+    component: (resolve) => require(['@/view/user/person.vue'], resolve),
+    meta: {
+      title: '个人资料'
+    }
+  },  
+  {
+    path: '/orderlist',    
+    name: 'orderlist',
+    component: (resolve) => require(['@/view/user/orderlist.vue'], resolve),
+    meta: {
+      title: '订单列表页'
+    }
+  },
+  {
+    path: '/index',    
+    name: 'index',
+    component: (resolve) => require(['@/view/goods/index.vue'], resolve),
+    meta: {
+      title: '商品详情页'
+    }
+  }    
 ];
 
 // add route path
