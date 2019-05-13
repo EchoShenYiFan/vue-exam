@@ -1,58 +1,44 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="onClickLeft"title="地址管理" class="nav-bar"></van-nav-bar>
+    <van-nav-bar left-arrow @click-left="onClickLeft" title="地址管理" class="nav-bar"></van-nav-bar>
     <!--<van-address-list v-model="chosenAddressId" :list="list" @add="onAdd" @edit="onEdit" />-->
-    <div class="address_list">
-    	<div class="address_item">
+    <div class="address_list" v-if="list.length>0">
+    	<div class="address_item" v-for="(value,key) in list" :key="key"> 
     		<div class="name_phone">
-    			<span class="name">张三</span>
-    			<span class="phone">13000000000</span>
+    			<span class="name">{{value.consignee}}</span>
+    			<span class="phone">{{value.mobile}}</span>
     		</div>
-    		<div class="address">浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室</div>
+    		<div class="address">{{value.province + value.city + value.district + value.address}}</div>
     		<div class="address_edit">
-    			<span class="moren">
+    			<span class="moren" >
     				<van-radio checked-color="#07c160">默认地址</van-radio>
     			</span>
     			<span class="edit_del">
-    				<i class="edit"><img src="../../assets/images/bianji.png"/>编辑</i>
-    				<i class="del"><img src="../../assets/images/shanchu.png"/>删除</i>
+    				<i class="edit" @click="onEdit(1,value.address_id)"><img src="../../assets/images/bianji.png"/>编辑</i>
+    				<i class="del" @click="onDel(value.address_id)"><img src="../../assets/images/shanchu.png"/>删除</i>
     			</span>
     		</div>
-    	</div>
-    	<div class="address_item">
-    		<div class="name_phone">
-    			<span class="name">张三</span>
-    			<span class="phone">13000000000</span>
-    		</div>
-    		<div class="address">浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室</div>
-    		<div class="address_edit">
-    			<span class="moren">
-    				<van-radio checked-color="#07c160">默认地址</van-radio>
-    			</span>
-    			<span class="edit_del">
-    				<i class="edit"><img src="../../assets/images/bianji.png"/>编辑</i>
-    				<i class="del"><img src="../../assets/images/shanchu.png"/>删除</i>
-    			</span>
-    		</div>
-    	</div>
+    	</div> 
     </div>
     <div class="add_address">
-    	<span>+ 新增地址</span>
+    	<span @click="onEdit(1,'')">+ 新增地址</span>
     </div>
   </div>
 </template>
 
 <script>
-import {NavBar, AddressList, Radio } from 'vant';
+import {NavBar, AddressList, Radio, Dialog } from 'vant';
 //Vue.use(AddressList);
 export default {
   components: {
   	[NavBar.name]:NavBar,
   	[AddressList.name]:AddressList,
-  	[Radio.name]:Radio
+		[Radio.name]:Radio,
+		[Dialog.name]:Dialog
   },
   data() {
-    return {
+    return { 
+			user_id:localStorage.getItem("user_id"),
       chosenAddressId: '1',
       list: [],
     }
@@ -66,19 +52,49 @@ export default {
 	methods: {
     onClickLeft(){
         console.log(1111111111);
-        this.$router.push({path:"/good-classes"})
-        // this.$router.go(-1);
-    },
-    onAdd() {
-      Toast('新增地址');
-    },
-
-    onEdit(item, index) {
-    	this.$router.push({path:"/edit_address"})
-//    Toast('编辑地址:' + index);
-    }
+        // this.$router.push({path:"/good-classes"})
+        this.$router.go(-1);
+		},
+		// 编辑
+    onEdit(type, address_id) {
+    	this.$router.push({
+				path:"/editAddress",
+				query:{
+          type:type,
+					address_id:address_id
+        }
+			})
+		},
+		// 删除
+		onDel(address_id){
+			let that=this;
+			Dialog.confirm({
+				title: '',
+				message: '确认要删除此收货地址吗？'
+			}).then(() => {
+				// on confirm
+				this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=DeleteReceiptAddress',{"user_id":this.user_id,"address_id":address_id}).then((response) => {
+					console.log(response);
+					if(response.code==0){
+						Toast(response.data);
+						for (let i = 0;i<that.list.length;i++){
+							let obj = that.list[i];
+							console.log(obj);
+							if (obj.address_id==address_id){
+								that.list.splice(i,1);
+								i--
+							}
+						}
+					}
+				})
+			}).catch(() => {
+				// on cancel
+			});
+		},
+		// 设为默认地址
+		
   }
-};
+}
 </script>
 
 <style lang="less">
@@ -89,6 +105,9 @@ export default {
 		font-family: "微软雅黑";
 		.van-nav-bar .van-icon{
 			color: #000000;
+		}
+		.van-nav-bar__title{
+			color:09B674;
 		}
 		.address_item{
 	  	background: #FFFFFF;
@@ -139,11 +158,14 @@ export default {
 	  		height: 50px;
 	  		line-height: 50px;
 	  		text-align: center;
-	  		background: red;
+	  		background: #09B674;
 	  		color: #FFFFFF;
-	  		border-radius: 20px;
+	  		border-radius: 30px;
 	  	}
-	  }
+		}
+		.van-radio__icon--round .van-icon{
+			border-radius: 3px;
+		}
 	}
   
 </style>

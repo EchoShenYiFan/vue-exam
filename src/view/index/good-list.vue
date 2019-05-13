@@ -9,38 +9,43 @@
         <div class="sort">
             <van-col span="8">
                 <div>
+                   <div>
                    综合 <img alt="" src="../../assets/images/033.png"> 
+                </div>
                 </div>
             </van-col>
             <van-col span="8">
-                <div>
+                <div @click="onClick">
                    价格 <img alt="" src="../../assets/images/033.png"> 
                 </div>
             </van-col>
             <van-col span="8">
-                <div>
-                   分类 <img alt="" src="../../assets/images/033.png"> 
+                <div @click="show = true">
+                   分类
                 </div>
             </van-col>
         </div>
-        <van-list  v-model="loading"  :finished="finished"  finished-text="没有更多了" @load="onLoad" class="good-list">
-            <van-cell  v-for="item in list" :key="item" class="good-item">
+         <van-list  class="good-list">  <!--v-model="loading"  :finished="finished"  finished-text="没有更多了" @load="onLoad" -->
+            <van-cell  v-for="(item,key) in list" :key="key" class="good-item">
                 <img :src="item.img" alt="">
                 <div class="good-info">
-                    <div class="good-name">{{item.name}}</div>
-                    <div class="good-price">￥<b>108</b></div>
+                    <div class="good-name">{{item.goods_name}}</div>
+                    <div class="good-price">￥<b>{{item.shop_price}}</b></div>
                     <div class="good-num">
-                        <span class="conment-num">152条评价</span>
-                        <span class="sale-num">月销量100笔</span>
+                        <span class="conment-num">{{item.comment}}条评价</span>
+                        <span class="sale-num">月销量{{item.praise_rate}}笔</span>
                     </div>
                 </div>
             </van-cell>
         </van-list>
+        <van-popup v-model="show" position="right" :overlay="true">
+            内容
+        </van-popup>
     </div>
 </template>
 
 <script>
-import {NavBar, Search, Row, Col, Icon, Cell, CellGroup } from 'vant';
+import {NavBar, Search, Row, Col, Icon, Cell, CellGroup,Popup ,List } from 'vant';
 export default {
      components: {
         [NavBar.name]:NavBar,
@@ -49,42 +54,62 @@ export default {
         [Col.name]: Col,
         [Icon.name]: Icon,
         [Cell.name]: Cell,
-        [CellGroup.name]: CellGroup
+        [CellGroup.name]: CellGroup,
+        [List.name]: List,
+        [Popup.name]: Popup
     },
     data() {
         return {
+            cat_id:this.$route.query.cat_id,
+            shop_price:"1",
             list: [],
-            loading: false,
-            finished: false
+            show: false,
+            // loading: false,
+            // finished: false
         };
     },
+    mounted(){
+        this.goodList();
+    },
 	created(){
-	  	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=goods_list',{"cat_id":"202","page":"1","num":"10"}).then((response) => {
-		    console.log(response)
-		    this.list=response.data;
-		})
+        console.log(this.cat_id);
 	},
     methods: {
         onClickLeft(){
             console.log(1111111111);
-            this.$router.push({path:"/good-classes"})
+            this.$router.push({path:"/goodClass"})
             // this.$router.go(-1);
         },
-        onLoad() {
-	        // 异步更新数据
-	        setTimeout(() => {
-	            for (let i = 0; i < 10; i++) {
-	            this.list.push(this.list.length + 1);
-	            }
-	            // 加载状态结束
-	            this.loading = false;
-	
-	            // 数据全部加载完成
-	            if (this.list.length >= 40) {
-	            this.finished = true;
-	            }
-	        }, 500);
+        goodList(){
+            this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=goods_list',{"cat_id":this.cat_id,shop_price:this.shop_price,"page":"1","num":"10"}).then((response) => {
+                console.log(response)
+                this.list=response.data;
+            })
+        },
+        onClick(){
+            let that=this;
+            if(that.shop_price==1){
+                that.shop_price=2;
+            }else{
+                that.shop_price=1;
+            }
+            that.goodList();
         }
+        // onLoad() {
+	    //     // 异步更新数据
+	    //     setTimeout(() => {
+	    //         for (let i = 0; i < 10; i++) {
+	    //             this.list.push(this.list.length + 1);
+	    //         }
+	    //         // 加载状态结束
+	    //         this.loading = false;
+	
+	    //         // 数据全部加载完成
+	    //         if (this.list.length >= 40) {
+	    //             this.finished = true;
+	    //         }
+	    //     }, 500);
+        // }
     }
 }
 </script>
@@ -163,7 +188,15 @@ export default {
             .good-num{
                 font-size: 12px;
                 color: #555555;
+                .sale-num{
+                    margin-left:10px;
+                }
             }
         }
+        .van-popup--right{
+            width:50%;
+            height:100%;
+        }
+    
     }
 </style>
