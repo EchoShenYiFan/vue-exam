@@ -4,7 +4,6 @@
 		  title="登录"
 		  right-text="立即注册"
 		  left-arrow
-		  @click-left="onClickLeft"
 		  @click-right="onClickRight"
 		></van-nav-bar>
 		<img :src="goods.thumb" class="avatar"/>

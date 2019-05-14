@@ -60,7 +60,7 @@
                 </van-goods-action>                        
             </van-tab>
             <van-tab title="详情">
-                <img v-for="img in goods.thumb"  :src="img" class="img-responsive">
+                <img v-for="img in goods.thumb"  :src="img" class="img-responsive" />
             </van-tab>
             <van-tab title="评价"></van-tab>
         </van-tabs> 

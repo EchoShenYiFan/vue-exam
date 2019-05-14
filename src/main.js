@@ -2,7 +2,10 @@ import Vue from 'vue';
 import App from './App';
 import { router } from './router';
 import axios from 'axios'
-import {post,fetch,patch,put} from './request/http'
+import {post,fetch,patch,put} from './request/http';
+import { List } from 'vant';
+
+Vue.use(List);
 //定义全局变量
 Vue.prototype.$post=post;
 Vue.prototype.$fetch=fetch;
