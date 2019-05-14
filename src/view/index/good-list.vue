@@ -15,7 +15,7 @@
                 </van-col>
                 <van-col span="8">
                     <div @click="onClick(2)">
-                        价格 <img alt="" src="../../assets/images/033.png"> 
+                        价格 <img alt="" :src="shop_price==1?normal:normal2"> 
                     </div>
                 </van-col>
                 <van-col span="8">
@@ -25,15 +25,15 @@
                 </van-col>
             </div>
         </div>
-        <van-list  class="good-list">  <!--v-model="loading"  :finished="finished"  finished-text="没有更多了" @load="onLoad" -->
-            <van-cell  v-for="(item,key) in list" :key="key" class="good-item">
-                <img :src="item.img" alt="">
+        <van-list  class="good-list">
+            <van-cell  v-for="(item,key) in list" :key="key" class="good-item" @click="goDetail(item.goods_id)">
+                <img :src="item.original_img!=''?'http://quhuiguoshi.zzqcnz.com/'+item.original_img:img" alt="">
                 <div class="good-info">
                     <div class="good-name">{{item.goods_name}}</div>
                     <div class="good-price">￥<b>{{item.shop_price}}</b></div>
                     <div class="good-num">
                         <span class="conment-num">{{item.comment}}条评价</span>
-                        <span class="sale-num">月销量{{item.praise_rate}}笔</span>
+                        <span class="sale-num">月销量 {{item.praise_rate}}</span>
                     </div>
                 </div>
             </van-cell>
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import {NavBar, Search, Row, Col, Icon, Cell, CellGroup,Popup ,List} from 'vant';
+import {NavBar, Search, Row, Col, Icon, Cell, CellGroup,Popup ,List, Lazyload } from 'vant';
 export default {
      components: {
         [NavBar.name]:NavBar,
@@ -67,7 +67,8 @@ export default {
         [Cell.name]: Cell,
         [CellGroup.name]: CellGroup,
         [List.name]: List,
-        [Popup.name]: Popup
+        [Popup.name]: Popup,
+        [Lazyload.name]: Lazyload
     },
     data() {
         return {
@@ -76,9 +77,10 @@ export default {
             list: [],
             show: false,
             cats:[],
-            CurrentIndex:0
-            // loading: false,
-            // finished: false
+            CurrentIndex:0,
+            img:require('../../assets/images/null_img.jpg'),
+            normal:require('../../assets/images/033.png'),
+            normal2:require('../../assets/images/034.png')
         };
     },
     mounted(){
@@ -86,7 +88,7 @@ export default {
     },
 	created(){
         this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=category_list').then((response) => {
-            console.log(response)
+            console.log(response);
             this.cats=response.data;
         })
         console.log(this.cat_id);
@@ -94,14 +96,12 @@ export default {
     methods: {
         // 返回
         onClickLeft(){
-            console.log(1111111111);
-            this.$router.push({path:"/goodClass"})
-            // this.$router.go(-1);
+            this.$router.go(-1);
         },
         // 商品列表
         goodList(){
             this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=goods_list',{"cat_id":this.cat_id,shop_price:this.shop_price,"page":"1","num":"10"}).then((response) => {
-                console.log(response)
+                console.log(response);
                 this.list=response.data;
             })
         },
@@ -114,8 +114,7 @@ export default {
                 }else{
                     that.shop_price=1;
                 }
-            }
-            
+            } 
             that.goodList();
         },
         // 分类
@@ -128,23 +127,17 @@ export default {
             that.cat_id=cat_id;
             that.goodList();
             that.show=false;
+        },
+        // 商品详情
+        goDetail(goods_id){
+            this.$router.push({
+                path:"/index",
+                query:{
+                    goods_id:goods_id
+                }
+            });
         }
-        // onLoad() {
-	    //     // 异步更新数据
-	    //     setTimeout(() => {
-	    //         for (let i = 0; i < 10; i++) {
-	    //             this.list.push(this.list.length + 1);
-	    //         }
-	    //         // 加载状态结束
-	    //         this.loading = false;
-	
-	    //         // 数据全部加载完成
-	    //         if (this.list.length >= 40) {
-	    //             this.finished = true;
-	    //         }
-	    //     }, 500);
-        // }
-    }
+    },
 }
 </script>
 

@@ -12,7 +12,7 @@ const routes = [
   	path: '/home',  	
     name: 'home',
     component: (resolve) => require(['@/view/index/index.vue'], resolve),
-    meta: {
+    meta: { 
       title: '首页'
     }
   },
@@ -65,7 +65,7 @@ const routes = [
     }
   },
   {
-  	path: '/editPassword',  	
+  	path: '/editPassword',  	 
     name: 'editPassword',
     component: (resolve) => require(['@/view/login/editPassword.vue'], resolve),
     meta: {
@@ -96,30 +96,14 @@ const routes = [
       title: '地址管理'
     }
   },
-  {
-    path: '/person',    
-    name: 'person',
-    component: (resolve) => require(['@/view/user/person.vue'], resolve),
-    meta: {
-      title: '个人资料'
-    }
-  },  
-  {
-    path: '/orderlist',    
-    name: 'orderlist',
-    component: (resolve) => require(['@/view/user/orderlist.vue'], resolve),
-    meta: {
-      title: '订单列表页'
-    }
-  },
-  {
-    path: '/index',    
-    name: 'index',
-    component: (resolve) => require(['@/view/goods/index.vue'], resolve),
-    meta: {
-      title: '商品详情页'
-    }
-  }    
+  // {
+  // 	path: '/goodDetail',  	 
+  //   name: 'goodDetail',
+  //   component: (resolve) => require(['@/view/goods/index.vue'], resolve),
+  //   meta: {
+  //     title: '商品详情'
+  //   }
+  // }
 ];
 
 // add route path
