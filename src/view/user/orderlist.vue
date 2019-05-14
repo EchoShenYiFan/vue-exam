@@ -7,7 +7,7 @@
       left-arrow
       @click-left="onClickLeft"
     />  
-    <van-tabs v-model="active">
+    <van-tabs v-model="active" @click="onClick">
       <van-tab title="全部订单"> 
         <van-card
           v-for="item in orderlist"
@@ -17,10 +17,16 @@
           :thumb="item.imageURL"
           :origin-price="item.marketprice"
         > 
-          <div slot="footer">
-            <van-button size="mini">按钮</van-button>
-            <van-button size="mini">按钮</van-button>
-          </div>
+            <div slot="footer" v-if="item.status==1">
+              <van-button plain type="primary" size="small" @click="DelOrder(item.orderno)">取消订单</van-button>
+              <van-button plain type="primary" size="small">去付款</van-button>
+            </div>
+            <div slot="footer" v-if="item.status==2">
+              <van-button plain type="primary" size="small" @click="DelOrder(item.orderno)">取消订单</van-button>
+            </div>
+            <div slot="footer" v-if="item.status==3">
+              <van-button plain type="primary" size="small">确认收货</van-button>
+            </div> 
         </van-card>        
       </van-tab>
       <van-tab title="待付款">
@@ -37,9 +43,9 @@
             v-if="item.status==1"
           >        
             <div slot="footer">
-              <van-button size="mini">按钮</van-button>
-              <van-button size="mini">按钮</van-button>
-            </div>
+              <van-button plain type="primary" size="small" @click="DelOrder(item.orderno)">取消订单</van-button>
+              <van-button plain type="primary" size="small">去付款</van-button>
+            </div>                        
           </van-card>         
         </div>       
 
@@ -58,8 +64,7 @@
             v-if="item.status==2"
           >        
             <div slot="footer">
-              <van-button size="mini">按钮</van-button>
-              <van-button size="mini">按钮</van-button>
+              <van-button plain type="primary" size="small" @click="DelOrder(item.orderno)">取消订单</van-button>
             </div>
           </van-card>         
         </div>
@@ -78,8 +83,7 @@
             v-if="item.status==3"
           >        
             <div slot="footer">
-              <van-button size="mini">按钮</van-button>
-              <van-button size="mini">按钮</van-button>
+              <van-button plain type="primary" size="small">确认收货</van-button>
             </div>
           </van-card>         
         </div>        
@@ -90,6 +94,7 @@
 </template>
 
 <script>
+  import axios from 'axios';
 import { Row, Col, Icon, Cell, CellGroup, Tab, Tabs, NavBar, Card, Button, Toast  } from 'vant';
 
 export default {  
@@ -108,7 +113,9 @@ export default {
   },
   data() {
     return {
+      userid: 1,
       active: 0,
+      p: 1,
       orderlist:[
         { status: 1,
           orderno:12344789,
@@ -138,9 +145,78 @@ export default {
       ]
     };
   },
+  mounted(){
+      var name = this.$route.query.name;
+      console.log(name); 
+
+      var that = this;     
+      let user_id = localStorage.getItem("user_id");
+       axios.get('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php', {
+            params: {
+                act: 'ToBePay',
+                user_id: '1',
+                state: '1'
+            }
+          })
+          .then(function (response) {
+            console.log(response);console.log(response.data.data);
+            if(response.status==200){
+              // this.orderlist = response.data.data.orderlist;
+            }
+            
+          })
+          .catch(function (error) {
+            console.log(error);
+          });               
+  },  
   methods: {
-    onClick(index, title) {
-      this.$toast(title);
+    onClick(index, type, title) {
+      // this.$toast(title);
+      // console.log(type);
+      let that = this;
+      console.log(index+1);
+        axios.get('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php', {
+            params: {
+                act: 'ToBePay',
+                user_id: '1',
+                state: index+1
+            }
+        })
+        .then(function (response) {
+          console.log(response);console.log(that.active);
+          //that.active = index;
+          if(response.status==200){
+            // that.orderlist = response.data.data.orderlist;
+           
+          }
+          
+        })
+        .catch(function (error) {
+          console.log(error);
+        }); 
+    },
+    DelOrder(id) {
+      console.log(id);
+        axios.get('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php', {
+            params: {
+                act: 'DelOrder',
+                user_id: '1',
+                order_id: id
+            }
+        })
+        .then(function (response) {
+          console.log(response);console.log(this.active);
+          //that.active = index;
+          if(response.status==200){
+            Toast('订单删除成功');
+            // that.orderlist = response.data.data.orderlist;
+           
+          }
+          
+        })
+        .catch(function (error) {
+          console.log(error);
+        });      
     },
     onClickLeft() {
 

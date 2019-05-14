@@ -21,12 +21,7 @@
                 </template>
             </van-cell>
 
-        </van-cell-group>
-<!-- <van-cell-group>
-    <van-field required placeholder="请填写" label="单元格" type="number" input-align="right"/>
-    <van-text slot="button" size="small" type="text">单位</van-text>
-</van-cell-group> -->
-      
+        </van-cell-group>      
         <van-field placeholder="请输入您的昵称" label="昵称" type="text" input-align="right"/>
         <van-cell title="性别" :value="sex" is-link @click="showBase=!showBase" />
         <van-popup v-model="showBase" position="bottom" :overlay="true" v-if="showBase">
@@ -72,6 +67,15 @@ export default {
         })
         .then(function (response) {
             console.log(response);
+            if(response.status==20){
+                this.alias = response.data.data.alias;
+                this.sex = response.data.data.alias;
+                this.mobile_phone = response.data.data.mobile_phone;
+                this.headimg = response.data.data.headimg;
+            }else{
+                Toast('获取信息失败');
+            }
+          
         })
         .catch(function (error) {
             console.log(error);
@@ -79,10 +83,7 @@ export default {
     },
     methods: {
         onClickLeft() {
-          Toast('返回');
-        },
-        onClickRight() {
-          Toast('保存');
+          that.$router.go(-1);
         },
         onChange(picker, value, index) {
           // Toast(`当前值：${value}, 当前索引：${index}`);
@@ -110,16 +111,22 @@ export default {
                 console.log(error);
               });           
         },
-        submit() {
-            let user_id = localStorage.getItem("user_id");
+        onClickRight() {
+            let that = this;
             axios.post('http://www.nongzi.com/mobile/jiekou.php?act=edit_info', {
                 user_id: '1',
-                alias: '',
-                sex: '',
-                mobile_phone: ''
+                alias: that.alias,
+                sex: that.sex,
+                mobile_phone: that.mobile_phone
             })
             .then(function (response) {
                 console.log(response);
+                if(response.status==20){
+                    Toast('修改资料成功~');
+                    // that.$router.go(-1);
+                }else{
+
+                } 
             })
             .catch(function (error) {
                 console.log(error);
