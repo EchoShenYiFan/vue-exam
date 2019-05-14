@@ -6,10 +6,10 @@ Vue.use(Router);
 const routes = [
   {
     path: '*',
-    redirect: '/home'
+    redirect: '/login'
   },
   {
-  	path: '/home',  	
+  	path: '/home',
     name: 'home',
     component: (resolve) => require(['@/view/index/index.vue'], resolve),
     meta: {
@@ -17,7 +17,7 @@ const routes = [
     }
   },
   {
-  	path: '/goodClass',  	
+  	path: '/goodClass',
     name: 'goodClass',
     component: (resolve) => require(['@/view/index/good-classes.vue'], resolve),
     meta: {
@@ -25,7 +25,7 @@ const routes = [
     }
   },
   {
-  	path: '/car',  	
+  	path: '/car',
     name: 'car',
     component: (resolve) => require(['@/view/index/car.vue'], resolve),
     meta: {
@@ -33,7 +33,7 @@ const routes = [
     }
   },
   {
-  	path: '/mine',  	
+  	path: '/mine',
     name: 'mine',
     component: (resolve) => require(['@/view/index/mine.vue'], resolve),
     meta: {
@@ -41,7 +41,7 @@ const routes = [
     }
   },
   {
-  	path: '/login',  	
+  	path: '/login',
     name: 'login',
     component: (resolve) => require(['@/view/login/login.vue'], resolve),
     meta: {
@@ -49,7 +49,7 @@ const routes = [
     }
   },
   {
-  	path: '/register',  	
+  	path: '/register',
     name: 'register',
     component: (resolve) => require(['@/view/login/register.vue'], resolve),
     meta: {
@@ -57,7 +57,7 @@ const routes = [
     }
   },
   {
-  	path: '/password',  	
+  	path: '/password',
     name: 'password',
     component: (resolve) => require(['@/view/login/password.vue'], resolve),
     meta: {
@@ -65,7 +65,7 @@ const routes = [
     }
   },
   {
-  	path: '/editPassword',  	
+  	path: '/editPassword',
     name: 'editPassword',
     component: (resolve) => require(['@/view/login/editPassword.vue'], resolve),
     meta: {
@@ -73,7 +73,7 @@ const routes = [
     }
   },
   {
-  	path: '/goodList',  	 
+  	path: '/goodList',
     name: 'goodList',
     component: (resolve) => require(['@/view/index/good-list.vue'], resolve),
     meta: {
@@ -81,7 +81,7 @@ const routes = [
     }
   },
   {
-  	path: '/myAddress',  	 
+  	path: '/myAddress',
     name: 'myAddress',
     component: (resolve) => require(['@/view/user/my_address.vue'], resolve),
     meta: {
@@ -89,7 +89,7 @@ const routes = [
     }
   },
   {
-  	path: '/editAddress',  	 
+  	path: '/editAddress',
     name: 'editAddress',
     component: (resolve) => require(['@/view/user/edit_address.vue'], resolve),
     meta: {
@@ -97,15 +97,15 @@ const routes = [
     }
   },
   {
-    path: '/person',    
+    path: '/person',
     name: 'person',
     component: (resolve) => require(['@/view/user/person.vue'], resolve),
     meta: {
       title: '个人资料'
     }
-  },  
+  },
   {
-    path: '/orderlist',    
+    path: '/orderlist',
     name: 'orderlist',
     component: (resolve) => require(['@/view/user/orderlist.vue'], resolve),
     meta: {
@@ -113,12 +113,13 @@ const routes = [
     }
   },
   {
-    path: '/index',    
+    path: '/index',
     name: 'index',
     component: (resolve) => require(['@/view/goods/index.vue'], resolve),
     meta: {
       title: '商品详情页'
     }
+
   },
   {
     path: '/submitOrder',    
@@ -144,6 +145,9 @@ const routes = [
       title: '提现'
     }
   },
+
+  
+
 ];
 
 // add route path

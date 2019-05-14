@@ -157,7 +157,7 @@ export default {
 					}
 		  	}
 		  	.edit_del{
-		  		display: inline-block;
+		  		// display: inline-block;
 		  		float: right;
 		  		i{
 		  			font-style: normal;
@@ -192,6 +192,9 @@ export default {
 		}
 		.van-checkbox__icon--round .van-icon{
 			border-radius: 3px;
+		}
+		.van-checkbox__icon--checked ~ .van-checkbox__label{
+	  		color: #09B674; 
 		}
 	}
   

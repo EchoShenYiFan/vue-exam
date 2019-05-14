@@ -1,7 +1,7 @@
 <template>
     <div class="calssification">
         <van-nav-bar title="分类" class="nav-bar"></van-nav-bar>
-        <van-row class="container">
+        <van-row class="container" v-if="cats.length>0">
             <van-col span="6" class="col-left">
                 <div class="cat-list" :id="CurrentIndex==key?'active':''" v-for="(value,key) in cats" :key="key" @click="navList(key)">{{value.cat_name}} </div>
             </van-col>
@@ -34,7 +34,7 @@ import {NavBar, Row, Col, Icon, Cell, CellGroup } from 'vant';
 export default {
   data(){
       return{
-        CurrentIndex:0,
+        CurrentIndex:'',
         cats:[]
       }
   },
@@ -48,17 +48,18 @@ export default {
     [CellGroup.name]: CellGroup
   },
   computed: {
-
+    
   },
   created(){
   	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=category_list').then((response) => {
-	    console.log(response)
+	    console.log(response);
 	    this.cats=response.data;
-	})
+    });
+    this.CurrentIndex=0;
   },
   methods: {
     navList(index){
-        this.CurrentIndex=index;
+        this.CurrentIndex=index; 
     },
     goList(cat_id){
         console.log(cat_id)
@@ -74,7 +75,7 @@ export default {
 </script>
 
 <style lang="less">
-    html,body,#app,.calssification{
+    html,body,#app,.calssification{ 
         height: 100%;
         background:#ffffff;
     }
@@ -89,6 +90,7 @@ export default {
         height: calc(100% - 47px);
         width: 100%;
         overflow: hidden;
+        background: #ffffff;
     }
     .col-left{
         height: 100%;

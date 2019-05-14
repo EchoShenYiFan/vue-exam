@@ -63,7 +63,7 @@ export default {
 
   methods: {
     onClickLeft() {
-
+      this.$router.push({path:"/login"})
     },
     onClickRight() {
 			this.$router.push({path:"/login"})

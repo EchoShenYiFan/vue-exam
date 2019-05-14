@@ -17,18 +17,19 @@
             <div>
 							<ul>
 								<li @click="openProvince">
-									<i>{{provincename}}</i>
+									<span>{{provincename}}</span>
+                  <van-icon :name="show1==true?'arrow-up':'arrow-down'"/>
 								</li>
 								<li @click="opencity">
-									<i>{{cityname}}</i>
+									<span>{{cityname}}</span>
+                  <van-icon :name="show2==true?'arrow-up':'arrow-down'"/>
 								</li>
 								<li @click="opendistrict">
-									<i>{{districtname}}</i>
+									<span>{{districtname}}</span>
+                  <van-icon :name="show3==true?'arrow-up':'arrow-down'"/>
 								</li>
 							</ul>
 						</div>
-						<!-- <i></i>
-						<em class="iconfont iconjiantou2"></em> -->
 					</label>
 				</li>
 				<li class="address_details">
@@ -42,15 +43,15 @@
         </span>
 			</div>
       <div>
-				<van-popup position="bottom" :overlay="false" v-model="show1" v-if="show1">
+				<van-popup position="bottom" :overlay="true" v-model="show1" v-if="show1">
 					<van-picker show-toolbar :columns="columns" value-key="region_name"  @cancel="onCancel" @confirm="onConfirm"/>
 				</van-popup>
 				
-				<van-popup position="bottom" :overlay="false" v-model="show2" v-if="show2">
+				<van-popup position="bottom" :overlay="true" v-model="show2" v-if="show2">
 					<van-picker show-toolbar :columns="columns1" value-key="region_name"  @cancel="onCancel1" @confirm="onConfirm1"/>
 				</van-popup>
 				
-				<van-popup position="bottom" :overlay="false" v-model="show3" v-if="show3">
+				<van-popup position="bottom" :overlay="true" v-model="show3" v-if="show3">
 					<van-picker show-toolbar :columns="columns2" value-key="region_name"  @cancel="onCancel2" @confirm="onConfirm2"/>
 				</van-popup>
 			</div>
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import {NavBar,Area,Checkbox,Toast,Popup,Picker} from 'vant';
+import {NavBar,Area,Checkbox,Toast,Popup,Picker,Icon} from 'vant';
 export default {
   components: {
   	[NavBar.name]:NavBar,
@@ -67,7 +68,8 @@ export default {
     [Checkbox.name]:Checkbox,
     [Toast.name]:Toast,
     [Popup.name]:Popup,
-    [Picker.name]:Picker
+    [Picker.name]:Picker,
+    [Icon.name]:Icon
   },
   data() {
     return {
@@ -115,7 +117,7 @@ export default {
     }
 	},
 	methods: {
-    // //获取省市县id
+    //获取省id
     get_province(){
       const that = this;
       this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=get_province').then((response) => {
@@ -125,21 +127,23 @@ export default {
         }
       })
     },
+    //获取市id
     get_city(region_id){
       const that = this;
       this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=get_city_district',{"region_id":region_id}).then((response) => {
         if (response.code === 0) {
-          console.log(response);
+          // console.log(response);
           that.columns1=response.data;
-            that.city=response.data[0].region_id;
+          that.city=response.data[0].region_id;
         }
       })
     },
+    //获取县id
     get_district(region_id){
       const that = this;
       this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=get_city_district',{"region_id":region_id}).then((response) => {
         if (response.code === 0) {
-          console.log(response);
+          // console.log(response);
           that.columns2=response.data;
         }
       })
@@ -184,10 +188,12 @@ export default {
     onCancel2() {
       this.show3 = false;
     },
+    // 返回
     onClickLeft(){
-        console.log(1111111111);
-        this.$router.push({path:"/myAddress"})
+        // console.log(1111111111);
+        this.$router.go(-1);
     },
+    // 编辑地址时 展示信息
     edit_address(){
       console.log(this.user_id);
       const that = this
@@ -213,6 +219,7 @@ export default {
         
       })
     },
+    // 保存
     onSave() {
       const that = this;
       if(!this.consignee){
@@ -244,10 +251,11 @@ export default {
           is_default: this.default_moren,
         },
         this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=InsertReceiptAddress',params).then((response) => {
-          console.log(response);
+          // console.log(response);
           if(response.code==0){
             Toast(response.data);
-            this.$router.push({path:"/myAddress"})
+            // this.$router.push({path:"/myAddress"})
+            this.$router.go(-1);
           }
         })
       }else{
@@ -263,21 +271,22 @@ export default {
           is_default: this.default_moren,
         },
         this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=UpdateReceiptAddress',params).then((response) => {
-          console.log(response);
+          // console.log(response);
           if(response.code==0){
-            Toast(response.data);
-            this.$router.push({path:"/myAddress"})
+            // Toast(response.data);
+            this.$router.go(-1);
           }
         })
       }
     },
+    // 是否设置为默认地址
     moren(){
       if(this.default_moren==1){
         this.default_moren=0;
       }else{
         this.default_moren=1;
       }
-      console.log(this.default_moren);
+      // console.log(this.default_moren);
     }
   }
 }
@@ -304,23 +313,23 @@ export default {
         margin: 0 2%;
         span{
           width: 25%;
-          display: inline-block;
+          // display: inline-block;
           color: #101010;
           float: left;
         }
         input{
-          font-size: 14p);
+          font-size: 14ppx;
           border: none;
         }
         label{
-          width: 70%;
+          width: 75%;
           float: left;
-          display: inline-block;
+          // display: inline-block;
           div{
             width: 100%;
             ul li{
               position: relative;
-              width: 26%;
+              width: 29%;
               float: left;
               select{
                 width: 100%;
@@ -328,11 +337,19 @@ export default {
               }
             }
           }	
-          i{
-            font-style: normal;
+          span{
+            display: inline-block;
+            width: calc(100% - 15px);
             overflow: hidden;
             white-space: nowrap;
+            text-align: center;
+            i{
+              font-style: normal;
+              overflow: hidden;
+              white-space: nowrap;
+            }
           }
+          
           em{
             display: inline-block;
             transform: rotate(180deg);
