@@ -155,9 +155,6 @@ export default {
     this.getRecommendData()
   },
   methods: {
-<<<<<<< HEAD
-    
-=======
     //获取首页轮播图数据
     getSwiperData() {
       const that = this
@@ -222,7 +219,7 @@ export default {
       this.loading = false;
       this.getRecommendData();
     }
->>>>>>> 921e3338016686f6cc20e524ec70d90ee94f3ee2
+
   }
 };
 </script>
