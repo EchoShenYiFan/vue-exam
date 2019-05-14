@@ -1,29 +1,37 @@
 <template>
   <div>
     <div>
-      <van-checkbox-group class="card-goods" v-model="checkedGoods">
+      <van-nav-bar
+        class="nav"
+        title="购物车"
+        right-text="删除"
+        @click-right="deleteGood"
+      />
+      <van-checkbox-group class="card-goods" v-model="checkedGoods" v-if="goods.length == 0">
         <van-checkbox
           class="card-goods__item"
           v-for="item in goods"
           :key="item.id"
           :name="item.id"
         >
-          <van-card
-            :title="item.title"
-            :desc="item.desc"
-            :num="item.num"
-            :price="formatPrice(item.price)"
-            :thumb="item.thumb"
-          />
+        <van-card
+          :title="item.title"
+          :desc="item.desc"
+          :num="item.num"
+          :price="formatPrice(item.price)"
+          :thumb="item.thumb"
+        />
         </van-checkbox>
-      </van-checkbox-group>
-      <van-submit-bar
-        :price="totalPrice"
-        :disabled="!checkedGoods.length"
-        :button-text="submitBarText"
-        @submit="onSubmit"
-        class="submit-btn"
+          <van-submit-bar
+            :price="totalPrice"
+            :disabled="!checkedGoods.length"
+            :button-text="submitBarText"
+            @submit="onSubmit"
+            class="submit-btn"
       />
+      </van-checkbox-group>
+     <emptyCar v-else></emptyCar>
+      
     </div>
     <Footers :active="2"></Footers>
   </div>
@@ -31,10 +39,10 @@
 
 <script>
 import Footers from '@/component/footer'
-import { Checkbox, CheckboxGroup, Card, SubmitBar, Toast } from 'vant';
+import { Checkbox, CheckboxGroup, Card, SubmitBar, Toast,NavBar,Lazyload   } from 'vant';
+import EmptyCar from "@/view/cart/empty"
 
 export default {
-  
 
   data() {
     return {
@@ -60,7 +68,8 @@ export default {
         price: 2680,
         num: 1,
         thumb: 'https://img.yzcdn.cn/public_files/2017/10/24/320454216bbe9e25c7651e1fa51b31fd.jpeg'
-      }]
+      }],
+      //[]
     };
   },
 	components: {
@@ -68,7 +77,10 @@ export default {
     [Card.name]: Card,
     [Checkbox.name]: Checkbox,
     [SubmitBar.name]: SubmitBar,
-    [CheckboxGroup.name]: CheckboxGroup
+    [CheckboxGroup.name]: CheckboxGroup,
+    [NavBar.name]: NavBar,
+    [Lazyload.name]: Lazyload,
+    EmptyCar,
   },
   computed: {
     submitBarText() {
@@ -88,12 +100,28 @@ export default {
 
     onSubmit() {
       Toast('点击结算');
+    },
+
+    deleteGood() {
+      Toast('删除');
     }
   }
 };
 </script>
 
 <style lang="less">
+.van-nav-bar{
+  &__title{
+    color: #09b674;
+  }
+
+  &__text{
+    color: #101010;
+  }
+ 
+
+}
+
 .card-goods {
   padding: 10px 0;
   background-color: #fff;
@@ -124,5 +152,8 @@ export default {
 }
 .submit-btn{
   bottom: 50px;
+}
+body{
+  background: #fff;
 }
 </style>
