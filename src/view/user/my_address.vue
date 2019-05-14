@@ -10,8 +10,8 @@
     		</div>
     		<div class="address">{{value.province + value.city + value.district + value.address}}</div>
     		<div class="address_edit">
-    			<span class="moren" >
-    				<van-radio checked-color="#07c160">默认地址</van-radio>
+    			 <span class="moren"> <!-- @click="setDefault(address_id)" -->
+						<van-checkbox v-model="value.checked" checked-color="#07c160">默认地址</van-checkbox>
     			</span>
     			<span class="edit_del">
     				<i class="edit" @click="onEdit(1,value.address_id)"><img src="../../assets/images/bianji.png"/>编辑</i>
@@ -27,26 +27,36 @@
 </template>
 
 <script>
-import {NavBar, AddressList, Radio, Dialog } from 'vant';
+import {NavBar, AddressList, Radio, Dialog,Toast ,Checkbox} from 'vant';
 //Vue.use(AddressList);
 export default {
   components: {
   	[NavBar.name]:NavBar,
   	[AddressList.name]:AddressList,
 		[Radio.name]:Radio,
-		[Dialog.name]:Dialog
+		[Dialog.name]:Dialog,
+		[Toast.name]:Toast,
+		[Checkbox.name]:Checkbox,
   },
-  data() {
+  data() { 
     return { 
 			user_id:localStorage.getItem("user_id"),
-      chosenAddressId: '1',
-      list: [],
+			list: [],
+			checked:false
     }
   },
 	created(){
+		let taht=this;
 		this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=findaddress',{"user_id":"1"}).then((response) => {
 	    console.log(response)
-	    this.list=response.data;
+			this.list=response.data;
+			for(var i in response.data){
+				if(response.data[i].is_default==0){
+					this.list[i].checked=false;
+				}else{
+					this.list[i].checked=true;
+				}
+			}
 		})
 	},
 	methods: {
@@ -92,7 +102,16 @@ export default {
 			});
 		},
 		// 设为默认地址
-		
+		// setDefault(address_id){
+		// 	let that=this;
+		// 	this.$fetch('http://quhuiguoshi.zzqcnz.com/mobile/jiekou.php?act=morendizhi',{"user_id":this.user_id,"address_id":address_id}).then((response) => {
+		// 			console.log(response);
+		// 			if(response.code==0){
+		// 				Toast(response.data);
+		// 				that.checked=true;
+		// 			}
+		// 		})
+		// }
   }
 }
 </script>
@@ -107,7 +126,7 @@ export default {
 			color: #000000;
 		}
 		.van-nav-bar__title{
-			color:09B674;
+			color:#09B674;
 		}
 		.address_item{
 	  	background: #FFFFFF;
@@ -127,7 +146,15 @@ export default {
 	  	}
 	  	.address_edit{
 	  		.moren{
-		  		display: inline-block;
+					display: inline-block;
+					.van-checkbox__icon{
+						height:16px;
+						line-height:16px;
+						.van-icon{
+							width:16px;
+							height:16px;
+						}
+					}
 		  	}
 		  	.edit_del{
 		  		display: inline-block;
@@ -163,7 +190,7 @@ export default {
 	  		border-radius: 30px;
 	  	}
 		}
-		.van-radio__icon--round .van-icon{
+		.van-checkbox__icon--round .van-icon{
 			border-radius: 3px;
 		}
 	}

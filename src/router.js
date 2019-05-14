@@ -95,7 +95,55 @@ const routes = [
     meta: {
       title: '地址管理'
     }
-  }
+  },
+  {
+    path: '/person',    
+    name: 'person',
+    component: (resolve) => require(['@/view/user/person.vue'], resolve),
+    meta: {
+      title: '个人资料'
+    }
+  },  
+  {
+    path: '/orderlist',    
+    name: 'orderlist',
+    component: (resolve) => require(['@/view/user/orderlist.vue'], resolve),
+    meta: {
+      title: '订单列表页'
+    }
+  },
+  {
+    path: '/index',    
+    name: 'index',
+    component: (resolve) => require(['@/view/goods/index.vue'], resolve),
+    meta: {
+      title: '商品详情页'
+    }
+  },
+  {
+    path: '/submitOrder',    
+    name: 'submitOrder',
+    component: (resolve) => require(['@/view/cart/submitOrder.vue'], resolve),
+    meta: {
+      title: '提交订单'
+    }
+  },  
+  {
+    path: '/paySucess',    
+    name: 'paySucess',
+    component: (resolve) => require(['@/view/cart/paySucess.vue'], resolve),
+    meta: {
+      title: '支付成功'
+    }
+  },
+  {
+    path: '/tiXian',    
+    name: 'tiXian',
+    component: (resolve) => require(['@/view/cart/tiXian.vue'], resolve),
+    meta: {
+      title: '提现'
+    }
+  },
 ];
 
 // add route path

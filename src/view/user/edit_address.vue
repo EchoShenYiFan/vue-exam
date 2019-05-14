@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar left-arrow @click-left="onClickLeft"title="地址管理" right-text="保存" class="nav-bar" @click-right="onSave"></van-nav-bar>
+    <van-nav-bar left-arrow @click-left="onClickLeft" :title="title" right-text="保存" class="nav-bar" @click-right="onSave"></van-nav-bar>
     <div class="warp">
 			<ul>
 				<li>
@@ -37,7 +37,7 @@
 				</li>
 			</ul>
 			<div class="default">
-        <span class="moren">
+        <span class="moren" @click="moren">
           <van-checkbox v-model="checked" checked-color="#07c160">设为默认</van-checkbox>
         </span>
 			</div>
@@ -71,6 +71,7 @@ export default {
   },
   data() {
     return {
+      title:'',
       areaList:[],
       list:'',
       checked:true,
@@ -84,9 +85,9 @@ export default {
       user_id:localStorage.getItem("user_id"),
       address_id:this.$route.query.address_id,
       default_moren:1,
-      provincename:'',
-      cityname:'',
-      districtname:'',
+      provincename:'省',
+      cityname:'市',
+      districtname:'县',
       show1: false,
       show2: false,
       show3: false,
@@ -101,7 +102,9 @@ export default {
     this.get_province();
     if(this.address_id){
       this.edit_address();
+      this.title="编辑地址";
     }else{
+      this.title="新增地址";
       console.log(22222222)
     }
     if(this.address_id){
@@ -201,12 +204,33 @@ export default {
           that.districtname=response.data.pca_address.split(' ')[2];
           that.address=response.data.address;
           that.default_moren=response.data.is_default;
+          if(response.data.is_default==1){
+            that.checked=true;
+          }else{
+            that.checked=false;
+          }
         }
         
       })
     },
     onSave() {
-      const that = this
+      const that = this;
+      if(!this.consignee){
+        Toast('请填写收货人');
+        return;
+      }
+      if(!(/^1[3-9][0-9]{9}$/.test(this.mobile))){
+        Toast('请填手机号码');
+        return;
+      }
+      if(!this.province){
+        Toast('请选择所属地区');
+        return;
+      }
+      if(!this.address){
+        Toast('请填写详细地址');
+        return;
+      }
       let params;
       if(!this.address_id){
         params = {
@@ -246,6 +270,14 @@ export default {
           }
         })
       }
+    },
+    moren(){
+      if(this.default_moren==1){
+        this.default_moren=0;
+      }else{
+        this.default_moren=1;
+      }
+      console.log(this.default_moren);
     }
   }
 }
@@ -260,6 +292,9 @@ export default {
 		.van-nav-bar .van-icon,.van-nav-bar__text{
 			color: #000000;
     }
+    .van-nav-bar__title{
+			color:09B674;
+		}
     .warp{
       font-size:14px;
       ul li{
@@ -295,6 +330,8 @@ export default {
           }	
           i{
             font-style: normal;
+            overflow: hidden;
+            white-space: nowrap;
           }
           em{
             display: inline-block;
